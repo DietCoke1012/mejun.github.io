@@ -1,0 +1,747 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/mejun.github.io/img/fluid.png">
+  <link rel="icon" href="/mejun.github.io/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Me jun">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Boost电路的学习&emsp;&emsp;本博客记录自己DC-DC控制板V1.0过程中的一些bug和电路的知识，方便自己的学习。 &emsp;&emsp;项目背景：微电网平台的搭建，根据燃料电池的的电能供给升压到一定电压（24V，因为后面需要和锂电池做并联供能）用于负载供电。 Boost的功率电路 &emsp;&emsp;整个电路中的Boost主功率电路图，基于Boost的拓扑结构搭建，在输入输">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微电网平台">
+<meta property="og:url" content="https://dietcoke1012.github.io/mejun.github.io/2024/10/17/%E5%BE%AE%E7%94%B5%E7%BD%91%E5%B9%B3%E5%8F%B0/index.html">
+<meta property="og:site_name" content="Diet-Coke">
+<meta property="og:description" content="Boost电路的学习&emsp;&emsp;本博客记录自己DC-DC控制板V1.0过程中的一些bug和电路的知识，方便自己的学习。 &emsp;&emsp;项目背景：微电网平台的搭建，根据燃料电池的的电能供给升压到一定电压（24V，因为后面需要和锂电池做并联供能）用于负载供电。 Boost的功率电路 &emsp;&emsp;整个电路中的Boost主功率电路图，基于Boost的拓扑结构搭建，在输入输">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://dietcoke1012.github.io/mejun.github.io/img/sunset.jpg">
+<meta property="article:published_time" content="2024-10-17T03:35:00.000Z">
+<meta property="article:modified_time" content="2024-10-17T10:23:54.662Z">
+<meta property="article:author" content="Me jun">
+<meta property="article:tag" content="DC-DC">
+<meta property="article:tag" content="数字电源">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://dietcoke1012.github.io/mejun.github.io/img/sunset.jpg">
+  
+  
+  
+  <title>微电网平台 - Diet-Coke</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/mejun.github.io/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/mejun.github.io/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/mejun.github.io/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"dietcoke1012.github.io","root":"/mejun.github.io/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"7IjgtOfJFVbP4JQfCD5kmTjM-gzGzoHsz","app_key":"Y36I2R7feAbrDPpFFUB67sNI","server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/mejun.github.io/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/mejun.github.io/js/utils.js" ></script>
+  <script  src="/mejun.github.io/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/mejun.github.io/">
+      <strong>Me-jun</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mejun.github.io/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mejun.github.io/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mejun.github.io/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mejun.github.io/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/mejun.github.io/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/mejun.github.io/img/sunset.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="微电网平台"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-10-17 11:35" pubdate>
+          2024年10月17日 中午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span>次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">微电网平台</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="Boost电路的学习"><a href="#Boost电路的学习" class="headerlink" title="Boost电路的学习"></a>Boost电路的学习</h3><p>&emsp;&emsp;本博客记录自己DC-DC控制板V1.0过程中的一些bug和电路的知识，方便自己的学习。</p>
+<p>&emsp;&emsp;项目背景：微电网平台的搭建，根据燃料电池的的电能供给升压到一定电压（24V，因为后面需要和锂电池做并联供能）用于负载供电。</p>
+<h4 id="Boost的功率电路"><a href="#Boost的功率电路" class="headerlink" title="Boost的功率电路"></a>Boost的功率电路</h4><p><img src="/mejun.github.io/2024/10/17/%E5%BE%AE%E7%94%B5%E7%BD%91%E5%B9%B3%E5%8F%B0/Boost.png" srcset="/mejun.github.io/img/loading.gif" lazyload alt="Boost"></p>
+<p>&emsp;&emsp;整个电路中的Boost主功率电路图，基于Boost的拓扑结构搭建，在输入输出端都有采样电阻，用于采样电路的输入输出端的电压电流，个人觉得这个在上端或下端都没什么区别吧？<em>（虽然V2.0改成了下端采样）</em>这里还有待学习确认。输出端的SK1010，是害怕后面实际使用的时候万一自己的Boost电路升压控制不好出现一个较低于锂电池的电压会不会出现倒灌？于是自己加上的，但是这样的话是不是用非同步整流的Boost电路结构更合适呢？</p>
+<p>&emsp;&emsp;V1.0存在的问题，因为Boost电路是升压电路，测试的时候不能开环测试，以前玩电机电路的时候都是开环检测波形没事自己没考虑太多。与BUCK电路不一样，BUCK电路的输出端一个储能器件的电感，这个电感越大，电源纹波越小。<strong>boost电路中输出端并没有电感，当开关闭合时，后级电路完全是只有RC放电，当开关管导通时，电感中的能量被储存；当开关管关断时，电感中的能量被释放到输出端。如果电路空载（即输出端没有负载），电感的储能无法通过负载释放，电感的电流会持续增加，导致电感过流，可能烧毁电感或其他器件，如果此时输出电容的耐压较小也会损坏。当电感电流没有通过负载释放时，开关管在关断时可能会承受更高的电压应力，特别是在高频率下，这种应力可能会超过器件的额定电压，进而导致开关管的损坏。</strong> 因此这个电路，最便捷的方式就是在D5（SS210）后并联一个10K的电阻，当作假性负载释放电能，或者自己接一个放电电阻。</p>
+<h4 id="MOS驱动电路"><a href="#MOS驱动电路" class="headerlink" title="MOS驱动电路"></a>MOS驱动电路</h4><p><img src="/mejun.github.io/2024/10/17/%E5%BE%AE%E7%94%B5%E7%BD%91%E5%B9%B3%E5%8F%B0/mos_driven.png" srcset="/mejun.github.io/img/loading.gif" lazyload alt="mos_driven"></p>
+<p>&emsp;&emsp;这个电路就比较简单，一个驱动器将3.3V的pwm信号抬升至5V，然后输入MOS驱动电路芯片EG2104中，因为害怕自己的PWM信号到时候按键占空比没调试好，于是接一个端子测试。但是V1.0在使用的时候发现如果在一次升压工作后关闭电源，较短时间再上电工作或出现板子冒烟的情况，这感觉就好像再次上电的时候Boost下管被导通了，<strong>但是没接PWM端子的时候也会这样，难道是断电芯片有电压耦合？</strong>然后断电过一会再上电板子是可以正常工作的，于是为了保证MOS管的关断，V2.0的板子里面在栅极电阻上我并联了肖奈特二极管，能够快速关断，目前还不确定这个是否有用。</p>
+<h4 id="辅助电源"><a href="#辅助电源" class="headerlink" title="辅助电源"></a>辅助电源</h4><p><img src="/mejun.github.io/2024/10/17/%E5%BE%AE%E7%94%B5%E7%BD%91%E5%B9%B3%E5%8F%B0/5V.png" srcset="/mejun.github.io/img/loading.gif" lazyload alt="5V"><br>&emsp;&emsp;这里的电压是整个电路的大部分供电，差分比例运算放大电路、MOS驱动电路、LED显示等，但是我的DC-DC的输出是偏小于5V的（4.93？）这个电路并不是mps给的官方示例图，之前比赛的时候抄的网上方案，官方示例在AAM引脚会把这个VCC的退耦分压到AAM引脚，<strong>使MP2315S进入轻载条件下的非同步模式，数据手册的说明这能够让稳定性提高（不知道是不是真的）。我的输出偏低不知道是否与这个有关，</strong>这个输出电压偏低甚至影响了后面的运放电路。</p>
+<p><img src="/mejun.github.io/2024/10/17/%E5%BE%AE%E7%94%B5%E7%BD%91%E5%B9%B3%E5%8F%B0/mps5v.png" srcset="/mejun.github.io/img/loading.gif" lazyload alt="mps5v"></p>
+<p>&emsp;&emsp;在V2.0版本我换成了万金油方案TPS5430DDR，非同步BUCK方案降压到5V，换这个也是因为这是被使用很多且稳定的方案了。同时选择了宽电压范围的输入，原来mps的方案是24V的输入，TPS5430方案可以兼容至35V的输入，这也能够方便后面做电压矫正的时候多电压测试，</p>
+<p><img src="/mejun.github.io/2024/10/17/%E5%BE%AE%E7%94%B5%E7%BD%91%E5%B9%B3%E5%8F%B0/tps5430.png" srcset="/mejun.github.io/img/loading.gif" lazyload alt="tps5430"></p>
+<h4 id="采样电路"><a href="#采样电路" class="headerlink" title="采样电路"></a>采样电路</h4><p><img src="/mejun.github.io/2024/10/17/%E5%BE%AE%E7%94%B5%E7%BD%91%E5%B9%B3%E5%8F%B0/opa.png" srcset="/mejun.github.io/img/loading.gif" lazyload alt="OPA"></p>
+<p>&emsp;&emsp;这部分算是整个板子中很重要的电路，为恒功率控制微电网平台，需要采集输入输出端的电压电流，方便闭环PID控制，<em>（还有运放的一些采样部分没写完，这周末就补上）</em></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/mejun.github.io/categories/%E5%BC%80%E5%85%B3%E7%94%B5%E6%BA%90/" class="category-chain-item">开关电源</a>
+  
+  
+    <span>></span>
+    
+  <a href="/mejun.github.io/categories/%E5%BC%80%E5%85%B3%E7%94%B5%E6%BA%90/DC-DC/" class="category-chain-item">DC-DC</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/mejun.github.io/tags/DC-DC/" class="print-no-link">#DC-DC</a>
+      
+        <a href="/mejun.github.io/tags/%E6%95%B0%E5%AD%97%E7%94%B5%E6%BA%90/" class="print-no-link">#数字电源</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>微电网平台</div>
+      <div>https://dietcoke1012.github.io/mejun.github.io/2024/10/17/微电网平台/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Me jun</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年10月17日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/" title="LDO测试">
+                        <span class="hidden-mobile">LDO测试</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"7IjgtOfJFVbP4JQfCD5kmTjM-gzGzoHsz","appKey":"Y36I2R7feAbrDPpFFUB67sNI","path":"window.location.pathname","placeholder":"一起交流","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访问客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/mejun.github.io/js/events.js" ></script>
+<script  src="/mejun.github.io/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/mejun.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script defer src="/mejun.github.io/js/leancloud.js" ></script>
+
+  <script  src="/mejun.github.io/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/mejun.github.io/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

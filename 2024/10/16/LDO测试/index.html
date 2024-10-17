@@ -26,17 +26,14 @@
 <meta property="og:site_name" content="Diet-Coke">
 <meta property="og:description" content="开关电源–LDO(低压差线性稳压器)简介&emsp;&emsp;LDO即(low-dropout-regulator)，是一种低压差线性稳压器。这是相对于传统的线性稳压器来说的。传统的线性稳压器，如78XX系列的芯片都要求输入电压要比输出电压至少高出2V~3V，否则就不能正常工作。但是在一些情况下，这样的条件显然是太苛刻了，如5V转3.3V，输入与输出之间的压差只有1.7v，显然这是不满足传统线性">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://dietcoke1012.github.io/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/0d956dc9224117738d0265ad69cac892.jpg">
-<meta property="og:image" content="https://dietcoke1012.github.io/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/NMOS.png">
-<meta property="og:image" content="https://dietcoke1012.github.io/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/0d956dc9224117738d0265ad69cac892.jpg">
-<meta property="og:image" content="https://dietcoke1012.github.io/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/1698669299939.png">
-<meta property="og:image" content="https://dietcoke1012.github.io/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/1698671125672.png">
+<meta property="og:image" content="https://dietcoke1012.github.io/mejun.github.io/img/swim.jpg">
 <meta property="article:published_time" content="2024-10-16T12:43:28.000Z">
-<meta property="article:modified_time" content="2024-10-17T03:27:26.784Z">
+<meta property="article:modified_time" content="2024-10-17T10:22:05.115Z">
 <meta property="article:author" content="Me jun">
-<meta property="article:tag" content="[object Object]">
+<meta property="article:tag" content="LDO">
+<meta property="article:tag" content="线性稳压器">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://dietcoke1012.github.io/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/0d956dc9224117738d0265ad69cac892.jpg">
+<meta name="twitter:image" content="https://dietcoke1012.github.io/mejun.github.io/img/swim.jpg">
   
   
   
@@ -117,7 +114,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/mejun.github.io/">
-      <strong>Diet-Coke</strong>
+      <strong>Me-jun</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -213,7 +210,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/mejun.github.io/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/mejun.github.io/img/swim.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -242,7 +239,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k 字
+          1.6k 字
         
       </span>
     
@@ -253,7 +250,7 @@
         
         
         
-          13 分钟
+          14 分钟
         
       </span>
     
@@ -313,8 +310,7 @@
 <h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><h5 id="PMOS-LDO"><a href="#PMOS-LDO" class="headerlink" title="PMOS LDO"></a>PMOS LDO</h5><p>&emsp;&emsp;因为平常的电路设计常用的LDO为PMOS LDO的结构，为了理解方便根据这个结构进行学习总结。下面是PMOS LDO的简化结构图。主要由PMOS、运放、反馈电阻和基准参考电压构成。LDO主要工作流程是将输出电压通过分压电阻分压，Va和基准参考电压做比较，通过运放输出Vg来调节输出，反馈回路已用红色轨迹标识出，具体原理分两个方面详细介绍。</p>
 <p><img src="/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/0d956dc9224117738d0265ad69cac892.jpg" srcset="/mejun.github.io/img/loading.gif" lazyload alt="PMOS LDO的简化结构"> </p>
 <p>&emsp;&emsp;根据上述的结构图描述一下反馈回路的工作过程：<br>&emsp;&emsp;在电路的工作过程中，当输出端的负载电阻突然变大，电流减小，输出电压变小；此时两个串联分压电阻两端的电压也会下降；此时时，A点电压减小与参考电压Vref相比较，误差放大器会减小它的输出；使得G电位下降，Vs电压不变，|Vgs|的电压变大(因为是PMOS，Vs-Vg &lt; Vth,MOS管开启)，经过PMOS的输出电流Isd增大[1]，则输出电压增加，通过这个反馈过程对输出电压进行调节在想要的电压下。<br>&emsp;&emsp; <strong>(这里涉及到Vs-Vg &lt; Vth，mos管在饱和区工作的时候随着|Vgs|的增加，通过mos管的电流增大，这部分之后会整理一个mos管的内容–mejun)</strong></p>
-<p>&emsp;&emsp;第二个方面从PMOS驱动的反馈去描述：</p>
-<p>&emsp;&emsp;在反馈回路的介绍中，</p>
+<p>&emsp;&emsp;第二个方面从PMOS驱动的反馈去描述，在反馈回路的介绍中，</p>
 <h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><h5 id="发热"><a href="#发热" class="headerlink" title="发热"></a>发热</h5><p>&emsp;&emsp;因为LDO内部的调节管存在内阻，那么就会存在当经过输出电流的时候，LDO就会有一部分功率被消耗转成电阻发热，W &#x3D; IU，这里的U表示的是Uin-Uout电压差，I负载电流。对于这一部分就稍微注意一下使用的时候的压差和输出电流，压差一般是1.7(5~3.3),发热温度在60℃左右即可，保证芯片安全工作。</p>
 <h5 id="电路原理图"><a href="#电路原理图" class="headerlink" title="电路原理图"></a>电路原理图</h5><p>&emsp;下面是LDO设计中的常用原理图，一般就是在输入和输出段个加入一个电容，实际设计场景中很多都是一个0.1uf的陶瓷电容和22uf的钽电容组合搭配，<strong>而且输出电容需要钽电容</strong>，这个和钽电容较大的寄生电阻和LDO的环路稳定性有关。<br><img src="/mejun.github.io/2024/10/16/LDO%E6%B5%8B%E8%AF%95/1698669299939.png" srcset="/mejun.github.io/img/loading.gif" lazyload alt="电路原理图"> </p>
 <h5 id="LDO（线性稳压器）的评价参数"><a href="#LDO（线性稳压器）的评价参数" class="headerlink" title="LDO（线性稳压器）的评价参数"></a>LDO（线性稳压器）的评价参数</h5><ol>
@@ -332,7 +328,7 @@
 <p>以上内容参考了一些文章资料和视频<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ay4y1u7ei/?share_source=copy_web&vd_source=1ca4fe9c36e79ad18df958c8f8536259">【arduino百问】为什么你的电源芯片烫的可以烤肉了</a><br><a target="_blank" rel="noopener" href="http://t.csdnimg.cn/77dEE">电源系列1：LDO 基本 原理（一）</a></p>
 <p><a href="%E3%80%902%E6%AF%9B%E9%92%B1%E7%9A%84%E7%BA%BF%E6%80%A7%E7%A8%B3%E5%8E%8B%E5%99%A8(LDO">2毛钱的线性稳压器(LDO)你也敢用？</a>你也敢用？】 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1464y1v7Jd/?share_source=copy_web&vd_source=1ca4fe9c36e79ad18df958c8f8536259">https://www.bilibili.com/video/BV1464y1v7Jd/?share_source=copy_web&amp;vd_source=1ca4fe9c36e79ad18df958c8f8536259</a>)</p>
 </blockquote>
-<p>2023-10-30：文章中还有环路稳定性和钽电容的寄生电阻可以加上，PMOS反馈回路需要完善。<br>2024-10-16: 测试博客使用</p>
+<p>2023-10-30： 文章中还有环路稳定性和钽电容的寄生电阻可以加上，PMOS反馈回路需要完善，本文用来总结记录，雷同很多，学习交流使用<br>2024-10-16: 测试博客使用</p>
 
                 
               </div>
@@ -341,11 +337,41 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/mejun.github.io/categories/%E5%BC%80%E5%85%B3%E7%94%B5%E6%BA%90/" class="category-chain-item">开关电源</a>
+  
+  
+    <span>></span>
+    
+  <a href="/mejun.github.io/categories/%E5%BC%80%E5%85%B3%E7%94%B5%E6%BA%90/LDO/" class="category-chain-item">LDO</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
   
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/mejun.github.io/tags/object-Object/" class="print-no-link">#[object Object]</a>
+        <a href="/mejun.github.io/tags/LDO/" class="print-no-link">#LDO</a>
+      
+        <a href="/mejun.github.io/tags/%E7%BA%BF%E6%80%A7%E7%A8%B3%E5%8E%8B%E5%99%A8/" class="print-no-link">#线性稳压器</a>
       
     </div>
   
@@ -401,6 +427,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/mejun.github.io/2024/10/17/%E5%BE%AE%E7%94%B5%E7%BD%91%E5%B9%B3%E5%8F%B0/" title="微电网平台">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">微电网平台</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
